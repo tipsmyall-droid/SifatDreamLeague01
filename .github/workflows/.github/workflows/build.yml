@@ -1,0 +1,27 @@
+name: Build Sifat Dream League
+on: workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Extract project
+        run: unzip -o "SifatDreamLeague_v1 (1).zip"
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+      - name: Build APK and AAB
+        run: |
+          cd SifatDreamLeague_v1
+          gradle assembleDebug bundleDebug
+      - name: Upload APK and AAB
+        uses: actions/upload-artifact@v4
+        with:
+          name: Sifat-Dream-League
+          path: |
+            SifatDreamLeague_v1/app/build/outputs/apk/debug/*.apk
+            SifatDreamLeague_v1/app/build/outputs/bundle/debug/*.aab
